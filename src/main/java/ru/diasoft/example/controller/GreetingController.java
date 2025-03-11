@@ -1,10 +1,12 @@
 package ru.diasoft.example.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.diasoft.example.Greeting;
+import ru.diasoft.example.dto.Greeting;
+import ru.diasoft.example.services.GreetingServices;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -12,11 +14,11 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class GreetingController {
 
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
+    @Autowired
+    private GreetingServices greetingServices;
 
     @GetMapping("/greetings")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+        return greetingServices.newGreeting(name);
     }
 }
